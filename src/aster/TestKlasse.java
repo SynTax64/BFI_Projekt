@@ -1,6 +1,6 @@
 package aster;
 
-public class Main {
+public class TestKlasse {
 	public static void main(String[] args) {
 
 	}
