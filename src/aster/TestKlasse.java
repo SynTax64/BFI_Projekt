@@ -1,22 +1,21 @@
 package aster;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
+import java.util.Scanner;
 
 public class TestKlasse {
 	Mitarbeiter[] mitarbeiter_liste = new Mitarbeiter[Mitarbeiter.SIZE];
 
 	public static void main(String[] args) {
 		TestKlasse tk = new TestKlasse();
-		BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
+		Scanner input = new Scanner(System.in);
+		tk.init();
 		boolean beenden = false;
 		while (!beenden) {
 			tk.printMenu();
 			System.out.print("Wählen Sie bitte eine Auswahl aus: ");
 			int auswahl = 0;
 			try {
-				auswahl = reader.read();
+				auswahl = Integer.parseInt(input.nextLine());
 				switch (auswahl) {
 				case 1:
 					tk.ausgabe(tk.mitarbeiter_liste);
@@ -26,61 +25,74 @@ public class TestKlasse {
 					while (!sBeenden) {
 						System.out.print("Geben Sie bitte ID ein: ");
 						try {
-							int mSuche = reader.read();
+							int mSuche = Integer.parseInt(input.nextLine());
 							Mitarbeiter sMitarbeiter = tk.suche(mSuche);
 							if (sMitarbeiter != null) {
-								System.out.printf("Mitarbeiter mit ID %d wurde gerfunden!\n", mSuche);
+								System.out.printf("Mitarbeiter mit ID %d wurde gefunden!\n", mSuche);
 								System.out.println(sMitarbeiter);
 							} else {
-								System.out.printf("Mitarbeiter mit ID %d wurde nicht gerfunden!", mSuche);
+								System.out.printf("Mitarbeiter mit ID %d wurde nicht gefunden!\n", mSuche);
 							}
 							sBeenden = true;
-						} catch (IOException e) {
+						} catch (IllegalArgumentException e) {
 							System.out.println("Sie müssen einen numerischen Wert eingeben!");
 							continue;
 						}
 					}
 					break;
 				case 3:
-					System.out.printf("Die Anzahl der Angelstellter: %d", tk.getAnzAngestellterGesamt());
+					System.out.printf("Die Anzahl der Angelstellter: %d\n", tk.getAnzAngestellterGesamt());
 					break;
 				case 4:
-					System.out.printf("Die Anzahl der Arbeiter: %d", tk.getAnzArbeiterGesamt());
+					System.out.printf("Die Anzahl der Arbeiter: %d\n", tk.getAnzArbeiterGesamt());
 					break;
 				case 5:
 					beenden = true;
 					break;
 				default:
-					System.out.println("Sie müssen eine Auswahl zwischen 1 - 5 eingeben");
+					System.out.println("Sie müssen eine Auswahl zwischen 1 - 5 eingeben!");
 					boolean aBeenden = false;
 					while (!aBeenden) {
-						System.out.println("Wollen Sie beenden: (Y/N)");
+						System.out.print("Wollen Sie beenden: (Y/N): ");
 						try {
-							char sAuswahl = reader.readLine().charAt(0);
+							char sAuswahl = input.nextLine().charAt(0);
 							if (sAuswahl == 'Y' || sAuswahl == 'y') {
 								aBeenden = beenden = true;
+								return;
 							} else if (sAuswahl == 'N' || sAuswahl == 'n') {
 								aBeenden = true;
 							} else {
 								System.out.println("Sie müssen mit \"Y\" oder \"N\"");
 							}
 
-						} catch (IOException e) {
+						} catch (IllegalArgumentException e) {
 							System.out.println("Etwas ist schief gegangen!");
 							continue;
 						}
 					}
 				}
-			} catch (IOException e) {
+			} catch (IllegalArgumentException e) {
 				System.out.print("Sie müssen einen numerischen Wert eingeben: ");
 				continue;
 			}
-
+			while (true) {
+				System.out.print("Wollen Sie nochmal versuchen: (Y/N): ");
+				char erneuern = input.nextLine().charAt(0);
+				if (erneuern == 'Y' || erneuern == 'y') {
+					beenden = false;
+					break;
+				} else if (erneuern == 'N' || erneuern == 'n') {
+					beenden = true;
+					break;
+				} else {
+					System.out.println("Antworten Sie mit Y oder N!");
+				}
+			}
 		}
 		try {
-			reader.close();
-		} catch (IOException e) {
-			System.out.println("Buffered Read wurde nicht korrekt geschlossen");
+			input.close();
+		} catch (IllegalArgumentException e) {
+			System.out.println("Scanner wurde nicht korrekt geschlossen");
 			e.printStackTrace();
 		}
 	}
@@ -105,7 +117,7 @@ public class TestKlasse {
 	public void printMenu() {
 		System.out.println("*****  Firma KiSaHo  ******");
 		System.out.println("1. Print alle Mitarbeiter");
-		System.out.println("2.Suche Mitarbeiter nach ID");
+		System.out.println("2. Suche Mitarbeiter nach ID");
 		System.out.println("3. Anzahl des Angelstellter");
 		System.out.println("4. Anzahl des Arbeiter");
 		System.out.println("5. Beenden");

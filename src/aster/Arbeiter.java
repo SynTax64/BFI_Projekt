@@ -49,8 +49,8 @@ public class Arbeiter extends Mitarbeiter {
 
 	@Override
 	public String toString() {
-		return String.format("Arbeiter, stundenlohn= %.1f, anz_stunden= %.1f, schicht_Zulage= %.1f, %s",
-				getStundenlohn(), getAnz_stunden(), getSchicht_Zulage(), super.toString());
+		return String.format("%s, stundenlohn= %.1f, anz_stunden= %.1f, schicht_Zulage= %.1f, %s",
+				getClass().getSimpleName(), getStundenlohn(), getAnz_stunden(), getSchicht_Zulage(), super.toString());
 	}
 
 	public Arbeiter ausgabe() {

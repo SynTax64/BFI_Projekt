@@ -42,7 +42,7 @@ public class Angestellter extends Mitarbeiter {
 
 	@Override
 	public String toString() {
-		return String.format("Angestellter, grundgehalt= %.1f, zulage= %.1f, %s", getGrundgehalt(), getZulage(),
-				super.toString());
+		return String.format("%s, grundgehalt= %.1f, zulage= %.1f, %s", getClass().getSimpleName(), getGrundgehalt(),
+				getZulage(), super.toString());
 	}
 }
