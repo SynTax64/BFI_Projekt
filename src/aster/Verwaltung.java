@@ -11,7 +11,7 @@ public class Verwaltung {
 		Mitarbeiter[] mitarbeiter_liste = new Mitarbeiter[Mitarbeiter.SIZE];
 		mitarbeiter_liste = init();
 
-		System.out.println("Die Gehaltsumme aller Mitarbeiter: " + berechneSummeAlleGehaelter(mitarbeiter_liste));
+		System.out.println("Die Gehaltssumme aller Mitarbeiter: " + berechneSummeAlleGehaelter(mitarbeiter_liste));
 		ausgabe(mitarbeiter_liste);
 
 	}
