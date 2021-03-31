@@ -1,6 +1,6 @@
 package aster;
 
-public class Mitarbeiter {
+public abstract class Mitarbeiter {
 
 	private int id;
 	private String name;
@@ -19,6 +19,8 @@ public class Mitarbeiter {
 		this.id = id;
 		this.name = name;
 	}
+
+	public abstract double berechneBrutto();
 
 	public int getId() {
 		return id;
