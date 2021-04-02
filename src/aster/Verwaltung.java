@@ -8,11 +8,16 @@ public class Verwaltung {
 	public static final int TAX_ARB = 20;
 
 	public static void main(String[] args) {
-		Mitarbeiter[] mitarbeiter_liste = new Mitarbeiter[Mitarbeiter.SIZE];
-		mitarbeiter_liste = init();
 
-		System.out.println("Die Gehaltssumme aller Mitarbeiter: " + berechneSummeAlleGehaelter(mitarbeiter_liste));
-		ausgabe(mitarbeiter_liste);
+		Abteilung[] alleAbteilungen = initAbteilung();
+		ausgabe_AlleAbteilungen(alleAbteilungen);
+		System.out.println("*************");
+		System.out.println(searchAbteilung(alleAbteilungen, 3));
+		System.out.println("*************");
+		Mitarbeiter[] mitarbeiterListe = getMitarbeiterListeVonAbteilung(alleAbteilungen, 2);
+		ausgabe(mitarbeiterListe);
+		System.out.println("*************");
+		System.out.println(searchMitarbeiterAusAlleAbteilungen(alleAbteilungen, 5));
 
 	}
 
@@ -22,8 +27,7 @@ public class Verwaltung {
 		String[] namen = new String[] { "David", "Bojan", "Nika", "Joanne", "Ferius", "Demi", "Domen", "Vasja", "Franc",
 				"Stefan", "Herbert", "Dane" };
 		Random rnd = new Random();
-		int idAngestellter = 100;
-		int idArbeiter = 500;
+		int idMitarbeiter = 1;
 
 		for (int i = 0; i < mitarbeiter.length; i++) {
 			if (i < mitarbeiter.length / 2) {
@@ -33,10 +37,10 @@ public class Verwaltung {
 				int randomZulage = 100 + (int) (Math.random() * (300 - 100));
 				// zufällig generierter Ortszuschlag
 				int ortszuschlag = 0 + (int) (Math.random() * (120 - 0));
-				mitarbeiter[i] = new Angestellter(++idAngestellter, namen[i], randomGrundGehalt, ortszuschlag,
+				mitarbeiter[i] = new Angestellter(idMitarbeiter++, namen[i], randomGrundGehalt, ortszuschlag,
 						randomZulage);
 			} else {
-				// zufällig generiertes Lohn (zwischen 12 - 18)
+				// zufällig generiertes Lohn per Stunde (zwischen 12 - 18)
 				int randomStundenLohn = 12 + (int) (Math.random() * (18 - 12));
 				// zufällig generierte Arbeitsstunden (zwischen 160 - 174)
 				int randomAnzahlStunden = 160 + (int) (Math.random() * (174 - 160));
@@ -44,11 +48,29 @@ public class Verwaltung {
 				int ortszuschlag = 0 + (int) (Math.random() * (120 - 0));
 				// zufällig generierte Zulage (zwischen 50 - 200)
 				int randomSchichtZulage = 50 + (int) (Math.random() * (200 - 50));
-				mitarbeiter[i] = new Arbeiter(++idArbeiter, namen[i], randomStundenLohn, randomAnzahlStunden,
+				mitarbeiter[i] = new Arbeiter(idMitarbeiter++, namen[i], randomStundenLohn, randomAnzahlStunden,
 						ortszuschlag, randomSchichtZulage);
 			}
 		}
 		return mitarbeiter;
+	}
+
+	public static Abteilung[] initAbteilung() {
+		Mitarbeiter[] mitarbeiter = init();
+		Abteilung[] abteilungen = new Abteilung[4];
+		// die Initialisierung der Mitarbeiter mit ID (1, 6, 7, 8) in die Abteilung PR.
+		abteilungen[0] = new Abteilung(1, "PR.",
+				new Mitarbeiter[] { mitarbeiter[0], mitarbeiter[5], mitarbeiter[6], mitarbeiter[7] });
+		// die Initialisierung der Mitarbeiter mit ID (2, 3, 9, 10, 11) in die Abteilung
+		// SALES
+		abteilungen[1] = new Abteilung(2, "SALES",
+				new Mitarbeiter[] { mitarbeiter[1], mitarbeiter[2], mitarbeiter[8], mitarbeiter[9], mitarbeiter[10] });
+		// die Initialisierung der Mitarbeiter mit ID (5, 6, 12) in die Abteilung IT.
+		abteilungen[2] = new Abteilung(3, "IT.", new Mitarbeiter[] { mitarbeiter[4], mitarbeiter[5], mitarbeiter[11] });
+		// die Initialisierung der Mitarbeiter mit ID (4) in die Abteilung HR.
+		abteilungen[3] = new Abteilung(4, "HR.", new Mitarbeiter[] { mitarbeiter[3] });
+
+		return abteilungen;
 	}
 
 	// die Methode gibt ein Objekttype Mitarbeiter aus, falls es nicht gefunden
@@ -131,5 +153,43 @@ public class Verwaltung {
 			netto = mitarbeiter.berechneBrutto() - ((mitarbeiter.berechneBrutto() / 100) * Verwaltung.TAX_ARB);
 		}
 		return netto;
+	}
+
+	public static Abteilung[] ausgabe_AlleAbteilungen(Abteilung[] abteilungen) {
+		for (int i = 0; i < abteilungen.length; i++) {
+			System.out.println(abteilungen[i]);
+		}
+		return abteilungen;
+	}
+
+	public static boolean searchAbteilung(Abteilung[] abteilungen, int id) {
+		for (int i = 0; i < abteilungen.length; i++) {
+			if (abteilungen[i].getId() == id) {
+				return true;
+			}
+		}
+		return false;
+	}
+
+	public static Mitarbeiter[] getMitarbeiterListeVonAbteilung(Abteilung[] abteilungen, int abt_id) {
+		if (searchAbteilung(abteilungen, abt_id)) {
+			for (int l = 0; l < abteilungen.length; l++) {
+				if (abteilungen[l].getId() == abt_id) {
+					return abteilungen[l].getMitarbeiter_liste();
+				}
+			}
+		}
+		return null;
+	}
+
+	public static Mitarbeiter searchMitarbeiterAusAlleAbteilungen(Abteilung[] abteilungen, int mitarbeiter_id) {
+		for (Abteilung abteilung : abteilungen) {
+			for (Mitarbeiter mitarbeiter : abteilung.getMitarbeiter_liste()) {
+				if (mitarbeiter.getId() == mitarbeiter_id) {
+					return mitarbeiter;
+				}
+			}
+		}
+		return null;
 	}
 }
