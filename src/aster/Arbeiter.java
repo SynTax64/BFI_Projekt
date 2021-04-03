@@ -73,7 +73,6 @@ public class Arbeiter extends Mitarbeiter {
 
 	@Override
 	public double berechneBrutto() {
-
 		return (getStundenlohn() * getAnz_stunden()) + getGetOrtszuschlag() + getSchicht_Zulage();
 	}
 }

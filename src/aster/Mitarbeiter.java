@@ -5,8 +5,6 @@ public abstract class Mitarbeiter {
 	private int id;
 	private String name;
 
-	public static final int SIZE = 12;
-
 	public Mitarbeiter() {
 		this(0, "unbekannt");
 	}

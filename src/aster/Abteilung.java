@@ -65,11 +65,13 @@ public class Abteilung {
 		for (int i = 0; i < getMitarbeiter_liste().length; i++) {
 			ausgabeMitarbeiter += mitarbeiter_liste[i] + "\n";
 		}
-		return String.format("Abteilung [id=%s, name=%s, abt_leiter=%s\n]Mitarbeiter Liste:\n%s", id, name, abt_leiter,
+
+		ausgabeMitarbeiter += "\n";
+		return String.format("Abteilung [id=%s, name=%s, abt_leiter=%s]\nMitarbeiter Liste:\n%s", id, name, abt_leiter,
 				ausgabeMitarbeiter);
 	}
 
-	public String ausgabe() {
-		return ausgabe();
+	public Abteilung ausgabe() {
+		return this;
 	}
 }
