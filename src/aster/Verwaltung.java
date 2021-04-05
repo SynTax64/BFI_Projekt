@@ -1,23 +1,38 @@
 package aster;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Random;
 
 public class Verwaltung implements Utility {
 
-	public List<Mitarbeiter> mitarbeiter_Liste;
-	public List<Abteilung> abteilungen_Liste;
+	final public List<Mitarbeiter> mitarbeiter_Liste;
+	final public List<Abteilung> abteilungen_Liste;
 	Firma firma;
 
 	public static void main(String[] args) {
 
 		Verwaltung verwaltung = new Verwaltung();
+		// die Datenausgabe der ganzen Firma und zwar alle Abteilungen und alle
+		// Mitarbeiter, die der bestimmten Abteilung angehören
 		System.out.println(verwaltung.getFirma());
+		System.out.println("-------------------------------");
+		// die Ausgabe, die den Wert aller Bruttogähalter zurückgibt
 		System.out.println("Brutto Gehalt alle Mitarbeiter: "
 				+ verwaltung.berechneSummeAlleGehaelter(verwaltung.getMitarbeiter_Liste()) + " EUR");
-//		Arrays.sort(verwaltung.mitarbeiter_Liste, verwaltung.sortMitarbeiterNachGehalt());
+		System.out.println("-------------------------------");
+		// die Methode "sortMitarbeiterNachGehalt" sortiert alle Mitarbeiter aus der
+		// Mitarbeiterliste nach Bruttogehälter der Mitarbeiter
+		verwaltung.sortMitarbeiterNachGehalt();
+		verwaltung.ausgabe(verwaltung.getMitarbeiter_Liste());
+		System.out.println("-------------------------------");
+		// die Methode "sortMitarbeiterNachNamen" sortiert alle Mitarbeiter aus der
+		// Mitarbeiterliste nach Namen der Mitarbeiter
+		verwaltung.sortMitarbeiterNachNamen();
+		verwaltung.ausgabe(verwaltung.getMitarbeiter_Liste());
+
 	}
 
 	public Verwaltung() {
@@ -35,20 +50,12 @@ public class Verwaltung implements Utility {
 		this.firma = firma;
 	}
 
-	public List<Mitarbeiter> getMitarbeiter_Liste() {
-		return mitarbeiter_Liste;
-	}
-
-	public void setMitarbeiter_Liste(List<Mitarbeiter> mitarbeiter_Liste) {
-		this.mitarbeiter_Liste = mitarbeiter_Liste;
+	public ArrayList<Mitarbeiter> getMitarbeiter_Liste() {
+		return (ArrayList<Mitarbeiter>) mitarbeiter_Liste;
 	}
 
 	public List<Abteilung> getAbteilungen_Liste() {
 		return abteilungen_Liste;
-	}
-
-	public void setAbteilungen_Liste(List<Abteilung> abteilungen_Liste) {
-		this.abteilungen_Liste = abteilungen_Liste;
 	}
 
 	// die Methode initialisiert die Testwerte in der Mitarbeiterliste
@@ -115,7 +122,7 @@ public class Verwaltung implements Utility {
 
 	// die Methode gibt ein Objekttype Mitarbeiter aus, falls es nicht gefunden
 	// wird, gibt es den Wert null zurück
-	public Mitarbeiter suche(ArrayList<Mitarbeiter> mitarbeiter, int id) {
+	public Mitarbeiter searchMitarbeiterInFirma(ArrayList<Mitarbeiter> mitarbeiter, int id) {
 		return ((isMitarbeiterIn(mitarbeiter, id) ? mitarbeiter.get(getIndexVonMitarbeiter(mitarbeiter, id)) : null));
 	}
 
@@ -131,7 +138,7 @@ public class Verwaltung implements Utility {
 	}
 
 	// die Methode gibt den Index des Mitarbeitobjektes zurück, falls es besteht,
-	// falls nicht gibt den Wert -1 zurück
+	// falls nicht gibt es den Wert -1 zurück
 	public int getIndexVonMitarbeiter(ArrayList<Mitarbeiter> mitarbeiter, int id) {
 		for (int i = 0; i < mitarbeiter.size(); i++) {
 			if (id == mitarbeiter.get(i).getId()) {
@@ -141,7 +148,8 @@ public class Verwaltung implements Utility {
 		return -1;
 	}
 
-	// die Methode gibt den Inhalt des Mitarbeiterobjektes aus
+	// die Methode gibt den Inhalt des Mitarbeiterobjektes mit einem dazugehörigen
+	// Nettogehalt aus
 	public void ausgabe(Mitarbeiter mitarbeiter) {
 		System.out.println(mitarbeiter + ", Netto= " + berechneNettoGehalt(mitarbeiter));
 	}
@@ -175,6 +183,7 @@ public class Verwaltung implements Utility {
 		return anz_arbeiter;
 	}
 
+	// berechnet die Bruttosumme aller Mitarbeiter
 	public double berechneSummeAlleGehaelter(List<Mitarbeiter> list) {
 		double summe = 0;
 		for (Mitarbeiter mitarbeiter : list) {
@@ -183,6 +192,7 @@ public class Verwaltung implements Utility {
 		return summe;
 	}
 
+	// berechnet das Nettogehalt eines Mitarbeiters
 	public double berechneNettoGehalt(Mitarbeiter mitarbeiter) {
 		double netto = 0;
 		if (mitarbeiter instanceof Angestellter) {
@@ -195,6 +205,7 @@ public class Verwaltung implements Utility {
 		return netto;
 	}
 
+	// die Ausgabe aller Abteilungen
 	public ArrayList<Abteilung> ausgabe_AlleAbteilungen(ArrayList<Abteilung> abteilungen) {
 		for (int i = 0; i < abteilungen.size(); i++) {
 			System.out.println(abteilungen.get(i));
@@ -202,6 +213,8 @@ public class Verwaltung implements Utility {
 		return abteilungen;
 	}
 
+	// gibt einen logischen Wert aus, wenn eine Abteilung mit einem bestimmten ID
+	// besteht oder nicht
 	public boolean searchAbteilung(ArrayList<Abteilung> abteilungen, int id) {
 		for (int i = 0; i < abteilungen.size(); i++) {
 			if (abteilungen.get(i).getId() == id) {
@@ -211,6 +224,8 @@ public class Verwaltung implements Utility {
 		return false;
 	}
 
+	// die Methode gibt die Arrayliste der Mitarbeiter in einer bestimmten Abteilung
+	// aus
 	public ArrayList<Mitarbeiter> getMitarbeiterListeVonAbteilung(ArrayList<Abteilung> abteilungen, int abt_id) {
 		if (searchAbteilung(abteilungen, abt_id)) {
 			for (int l = 0; l < abteilungen.size(); l++) {
@@ -222,6 +237,7 @@ public class Verwaltung implements Utility {
 		return null;
 	}
 
+// die Methode sucht nach einem Mitarbeiter aus allen Abteilungen, wenn er besteht, dann gibt das Mitarbeiterobjekt zurück
 	public Mitarbeiter searchMitarbeiterAusAlleAbteilungen(ArrayList<Abteilung> abteilungen, int mitarbeiter_id) {
 		for (Abteilung abteilung : abteilungen) {
 			for (Mitarbeiter mitarbeiter : abteilung.getMitarbeiter_liste()) {
@@ -233,31 +249,27 @@ public class Verwaltung implements Utility {
 		return null;
 	}
 
+	// die Methode macht eine Sortierung der Mitarbeiter nach Namen
 	public void sortMitarbeiterNachNamen() {
 
-		Comparator<Mitarbeiter> c = new Comparator<Mitarbeiter>() {
+		Collections.sort(mitarbeiter_Liste, new Comparator<Mitarbeiter>() {
 
 			@Override
 			public int compare(Mitarbeiter o1, Mitarbeiter o2) {
 				return o1.getName().compareToIgnoreCase(o2.getName());
 			}
-		};
+		});
 	}
 
+	// die Methode macht eine Sortierung der Mitarbeiter nach BruttoGehalt
 	public void sortMitarbeiterNachGehalt() {
 
-		Comparator<Mitarbeiter> c = new Comparator<Mitarbeiter>() {
+		Collections.sort(mitarbeiter_Liste, new Comparator<Mitarbeiter>() {
 
 			@Override
 			public int compare(Mitarbeiter o1, Mitarbeiter o2) {
-				if (o1.berechneBrutto() < o2.berechneBrutto()) {
-					return -1;
-				} else if (o1.berechneBrutto() > o2.berechneBrutto()) {
-					return 1;
-				} else {
-					return 0;
-				}
+				return Double.compare(o1.berechneBrutto(), o2.berechneBrutto());
 			}
-		};
+		});
 	}
 }
