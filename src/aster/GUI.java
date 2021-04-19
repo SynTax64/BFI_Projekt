@@ -4,6 +4,7 @@ import java.awt.BorderLayout;
 import java.awt.Button;
 import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.GridLayout;
 
@@ -25,10 +26,13 @@ public class GUI extends JFrame {
 	JLabel l_firmaManagementSystem;
 	JPanel p_hauptPannel = null;
 	JPanel p_ersteSection = null;
-	JPanel p_suberste1Section = null;
-	JPanel p_suberste2Section = null;
+	JPanel p_subErste1Section = null;
+	JPanel p_subErste2Section = null;
 	JPanel p_zweiteSection = null;
 	JPanel p_dritteSection = null;
+	JPanel p_dritteSub1Section = null;
+	JPanel p_dritteSub2Section = null;
+	JPanel p_dritteSub3Section = null;
 	JPanel p_vierteSection = null;
 	JPanel p_vierteSub1Section = null;
 	JPanel p_vierteSub2Section = null;
@@ -72,15 +76,18 @@ public class GUI extends JFrame {
 	public GUI() {
 
 		// Alle Panels der Applikation
-		p_hauptPannel = new JPanel(new GridLayout(2, 2, 10, 10));
-		p_ersteSection = new JPanel(new GridLayout(2, 1, 10, 10));
-		p_suberste1Section = new JPanel();
-		p_suberste2Section = new JPanel();
-		p_zweiteSection = new JPanel();
-		p_dritteSection = new JPanel();
-		p_vierteSection = new JPanel(new GridLayout(1, 2, 10, 10));
-		p_vierteSub1Section = new JPanel(new GridLayout(6, 2, 10, 10));
-		p_vierteSub2Section = new JPanel(new GridLayout(4, 1, 40, 20));
+		p_hauptPannel = new JPanel(new GridLayout(2, 2, 20, 20));
+		p_ersteSection = new JPanel(new GridLayout(2, 1, 20, 20));
+		p_subErste1Section = new JPanel(new GridLayout(1, 1));
+		p_subErste2Section = new JPanel(new GridLayout(2, 2));
+		p_zweiteSection = new JPanel(new GridLayout(1, 1, 20, 20));
+		p_dritteSection = new JPanel(new GridLayout(3, 1, 30, 30));
+		p_dritteSub1Section = new JPanel(new GridLayout(0, 2));
+		p_dritteSub2Section = new JPanel(new GridLayout(0, 1));
+		p_dritteSub3Section = new JPanel(new GridLayout(0, 1));
+		p_vierteSection = new JPanel(new GridLayout(1, 2, 20, 20));
+		p_vierteSub1Section = new JPanel(new GridLayout(6, 2, 0, 10));
+		p_vierteSub2Section = new JPanel(new GridLayout(4, 1, 0, 10));
 
 		l_firmaManagementSystem = new JLabel("Firma KiSaHo Management System", SwingConstants.CENTER);
 		// -------- 1 -----------
@@ -94,12 +101,12 @@ public class GUI extends JFrame {
 		t_listeMitarbeiter = new JTable(getMitarbeiterTestData(), getMitarbeiterHeaderData());
 		sc_listeMitarbeiter = new JScrollPane(t_listeMitarbeiter);
 		// -------- 3 -----------
-		l_AngestellteID = new JLabel("Angestellte ID: ");
+		l_AngestellteID = new JLabel("Angestellter ID: ");
 		t_AngestellteID = new JTextField();
-		b_AngestellterAnzeigenBearbeiten = new JButton("Angestellte anzeigen und bearbeiten");
-		b_NeuAngestellteAnlegen = new JButton("Neue Angestellte anlegen");
+		b_AngestellterAnzeigenBearbeiten = new JButton("Angestellter anzeigen und bearbeiten");
+		b_NeuAngestellteAnlegen = new JButton("Neuen Angestellter anlegen");
 		// -------- 4 -----------
-		l_AngestellteIDAkt = new JLabel("Angestellte ID: ");
+		l_AngestellteIDAkt = new JLabel("Angestellter ID: ");
 		t_AngestellteIDAkt = new JTextField();
 		l_AngestellteNameAkt = new JLabel("Name: ");
 		t_AngestellteNameAkt = new JTextField();
@@ -110,14 +117,16 @@ public class GUI extends JFrame {
 
 		l_AngestellteBruttoAkt = new JLabel("Brutto: ");
 		t_AngestellteBruttoAkt = new JTextField();
+		t_AngestellteBruttoAkt.setEditable(false);
 
 		l_AngestellteNettoAkt = new JLabel("Netto: ");
 		t_AngestellteNettoAkt = new JTextField();
+		t_AngestellteNettoAkt.setEditable(false);
 
-		b_AngestellteAktualiezieren = new JButton("Angestellte aktualisieren");
+		b_AngestellteAktualiezieren = new JButton("Angestellter aktualisieren");
 
-		b_AngestellteLoeschen = new JButton("Angestellte löschen");
-		b_AngestelleteSpeichern = new JButton("Angestellte speichern");
+		b_AngestellteLoeschen = new JButton("Angestellter löschen");
+		b_AngestelleteSpeichern = new JButton("Angestellter speichern");
 		b_AppClose = new JButton("Anwendung schließen");
 
 		// -------------------
@@ -128,17 +137,20 @@ public class GUI extends JFrame {
 		p_hauptPannel.add(p_dritteSection);
 		p_hauptPannel.add(p_vierteSection);
 
-		p_ersteSection.add(p_suberste1Section);
-		p_ersteSection.add(p_suberste2Section);
-		p_suberste1Section.add(sc_listeAbteil);
-		p_suberste2Section.add(b_angestellterAnz);
+		p_ersteSection.add(p_subErste1Section);
+		p_ersteSection.add(p_subErste2Section);
+		p_subErste1Section.add(sc_listeAbteil);
+		p_subErste2Section.add(b_angestellterAnz);
 
 		p_zweiteSection.add(sc_listeMitarbeiter);
 
-		p_dritteSection.add(l_AngestellteID);
-		p_dritteSection.add(t_AngestellteID);
-		p_dritteSection.add(b_AngestellterAnzeigenBearbeiten);
-		p_dritteSection.add(b_NeuAngestellteAnlegen);
+		p_dritteSection.add(p_dritteSub1Section);
+		p_dritteSection.add(p_dritteSub2Section);
+		p_dritteSection.add(p_dritteSub3Section);
+		p_dritteSub1Section.add(l_AngestellteID);
+		p_dritteSub1Section.add(t_AngestellteID);
+		p_dritteSub2Section.add(b_AngestellterAnzeigenBearbeiten);
+		p_dritteSub3Section.add(b_NeuAngestellteAnlegen);
 
 		p_vierteSection.add(p_vierteSub1Section);
 		p_vierteSection.add(p_vierteSub2Section);
@@ -162,9 +174,10 @@ public class GUI extends JFrame {
 		p_vierteSub2Section.add(b_AppClose);
 
 		getContentPane().add(p_hauptPannel, BorderLayout.CENTER);
-		setSize(new Dimension(1000, 500));
+
+		setSize(new Dimension(1000, 550));
 		setVisible(true);
-		setLayout(new BorderLayout());
+		getContentPane().setLayout(new BorderLayout());
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 	}
 
@@ -175,19 +188,34 @@ public class GUI extends JFrame {
 
 	public static String[][] getAbteilungenTestData() {
 		String[][] listeAbteilungen_TestData = { { "1", "HR", "12", "null" }, { "2", "IT", "5", "null" },
+				{ "3", "Service", "7", "null" }, { "1", "HR", "12", "null" }, { "2", "IT", "5", "null" },
+				{ "3", "Service", "7", "null" }, { "1", "HR", "12", "null" }, { "2", "IT", "5", "null" },
 				{ "3", "Service", "7", "null" } };
 		return listeAbteilungen_TestData;
 	}
 
 	public static String[] getMitarbeiterHeaderData() {
-		String[] listeMitarbeiter_headerData = { "Mit.ID", "Name", "DGehalt", "Zulage", "Brutto", "Netto" };
+		String[] listeMitarbeiter_headerData = { "Mit.ID", "Name", "Gehalt", "Zulage", "Brutto", "Netto" };
 		return listeMitarbeiter_headerData;
 	}
 
 	public static String[][] getMitarbeiterTestData() {
 		String[][] listeMitarbeiter_TestData = { { "101", "David", "50", "200", "3550", "3350" },
 				{ "102", "Nika", "60", "250", "3600", "3450" }, { "103", "Eva", "50", "2050", "3000", "3660" },
-				{ "104", "Joanne", "50", "200", "3550", "3350" }, { "105", "Denis", "50", "200", "3550", "3350" } };
+				{ "104", "Joanne", "50", "200", "3550", "3350" }, { "105", "Denis", "50", "200", "3550", "3350" },
+				{ "101", "David", "50", "200", "3550", "3350" }, { "102", "Nika", "60", "250", "3600", "3450" },
+				{ "103", "Eva", "50", "2050", "3000", "3660" }, { "104", "Joanne", "50", "200", "3550", "3350" },
+				{ "105", "Denis", "50", "200", "3550", "3350" }, { "101", "David", "50", "200", "3550", "3350" },
+				{ "102", "Nika", "60", "250", "3600", "3450" }, { "103", "Eva", "50", "2050", "3000", "3660" },
+				{ "104", "Joanne", "50", "200", "3550", "3350" }, { "105", "Denis", "50", "200", "3550", "3350" },
+				{ "101", "David", "50", "200", "3550", "3350" }, { "102", "Nika", "60", "250", "3600", "3450" },
+				{ "103", "Eva", "50", "2050", "3000", "3660" }, { "104", "Joanne", "50", "200", "3550", "3350" },
+				{ "105", "Denis", "50", "200", "3550", "3350" }, { "101", "David", "50", "200", "3550", "3350" },
+				{ "102", "Nika", "60", "250", "3600", "3450" }, { "103", "Eva", "50", "2050", "3000", "3660" },
+				{ "104", "Joanne", "50", "200", "3550", "3350" }, { "105", "Denis", "50", "200", "3550", "3350" },
+				{ "101", "David", "50", "200", "3550", "3350" }, { "102", "Nika", "60", "250", "3600", "3450" },
+				{ "103", "Eva", "50", "2050", "3000", "3660" }, { "104", "Joanne", "50", "200", "3550", "3350" },
+				{ "105", "Denis", "50", "200", "3550", "3350" } };
 		return listeMitarbeiter_TestData;
 	}
 
