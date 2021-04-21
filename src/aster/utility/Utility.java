@@ -1,4 +1,4 @@
-package aster;
+package aster.utility;
 
 import java.io.Serializable;
 

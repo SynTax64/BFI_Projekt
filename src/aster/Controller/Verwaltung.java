@@ -1,4 +1,4 @@
-package aster;
+package aster.Controller;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -6,6 +6,14 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Random;
+
+import aster.model.Abteilung;
+import aster.model.Angestellter;
+import aster.model.Arbeiter;
+import aster.model.Firma;
+import aster.model.Mitarbeiter;
+import aster.utility.Utility;
+import aster.view.GUI;
 
 public class Verwaltung implements Utility, Serializable {
 
@@ -106,6 +114,42 @@ public class Verwaltung implements Utility, Serializable {
 		ArrayList<Mitarbeiter> mitarbeiterInAbteilung_HR = new ArrayList<Mitarbeiter>();
 		mitarbeiterInAbteilung_HR.add(mitarbeiter_Liste.get(3));
 		abteilungen_Liste.add(new Abteilung(4, Utility.ABTEILUNG_HR, mitarbeiterInAbteilung_HR));
+	}
+
+	public void createFile() {
+
+	}
+
+	public void deleteFileIfExist() {
+
+	}
+
+	public void serialize() {
+
+	}
+
+	public void deserialize() {
+
+	}
+
+	public String getAngestellterNamen() {
+		return "";
+	}
+
+	public void writeName() {
+
+	}
+
+	public void readName() {
+
+	}
+
+	public void sortAndSerialize() {
+
+	}
+
+	public void getMostWorker() {
+
 	}
 
 	// die Methode gibt ein Objekttype Mitarbeiter aus, falls es nicht gefunden

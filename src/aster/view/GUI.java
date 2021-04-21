@@ -1,4 +1,4 @@
-package aster;
+package aster.view;
 
 import java.awt.BorderLayout;
 import java.awt.Dimension;
