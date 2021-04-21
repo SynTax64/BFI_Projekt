@@ -1,6 +1,8 @@
 package aster;
 
-public class Arbeiter extends Mitarbeiter {
+import java.io.Serializable;
+
+public class Arbeiter extends Mitarbeiter implements Serializable {
 	private double stundenlohn;
 	private double anz_stunden;
 	private double ortszuschlag;

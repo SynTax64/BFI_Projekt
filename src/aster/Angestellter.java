@@ -1,6 +1,10 @@
 package aster;
 
-public class Angestellter extends Mitarbeiter {
+import java.io.Serializable;
+
+public class Angestellter extends Mitarbeiter implements Serializable {
+
+	private static final long serialVersionUID = 2401164484960530319L;
 	private double grundgehalt;
 	private double ortszuschlag;
 	private double zulage;

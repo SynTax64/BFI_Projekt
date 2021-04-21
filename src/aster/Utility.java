@@ -1,6 +1,8 @@
 package aster;
 
-public interface Utility {
+import java.io.Serializable;
+
+public interface Utility extends Serializable {
 	int TAX_ANG = 20;
 	int TAX_ARB = 20;
 
@@ -11,5 +13,4 @@ public interface Utility {
 	String ABTEILUNG_SALES = "SALES";
 	String ABTEILUNG_HR = "HR.";
 	String ABTEILUNG_IT = "IT.";
-
 }

@@ -1,8 +1,11 @@
 package aster;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
-public class Abteilung {
+public class Abteilung implements Serializable {
+
+	private static final long serialVersionUID = -5315047731778856455L;
 	private int id;
 	private String name;
 	private String abt_leiter;

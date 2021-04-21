@@ -1,9 +1,12 @@
 package aster;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Firma {
+public class Firma implements Serializable {
+
+	private static final long serialVersionUID = -1327482906855942438L;
 	List<Mitarbeiter> mitarbeiter_Liste;
 	List<Abteilung> abteilungen_Liste;
 
@@ -25,6 +28,14 @@ public class Firma {
 	}
 
 	public void setAbteilungen_Liste(ArrayList<Abteilung> abteilungen_Liste) {
+		this.abteilungen_Liste = abteilungen_Liste;
+	}
+
+	public void setMitarbeiter_Liste(List<Mitarbeiter> mitarbeiter_Liste) {
+		this.mitarbeiter_Liste = mitarbeiter_Liste;
+	}
+
+	public void setAbteilungen_Liste(List<Abteilung> abteilungen_Liste) {
 		this.abteilungen_Liste = abteilungen_Liste;
 	}
 

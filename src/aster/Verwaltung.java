@@ -1,12 +1,15 @@
 package aster;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Random;
 
-public class Verwaltung implements Utility {
+public class Verwaltung implements Utility, Serializable {
+
+	private static final long serialVersionUID = 7915345725448136676L;
 
 	final public List<Mitarbeiter> mitarbeiter_Liste;
 	final public List<Abteilung> abteilungen_Liste;
@@ -16,22 +19,23 @@ public class Verwaltung implements Utility {
 
 		Verwaltung verwaltung = new Verwaltung();
 		// die Datenausgabe der ganzen Firma und zwar alle Abteilungen und alle
-		// Mitarbeiter, die der bestimmten Abteilung angehören
-		System.out.println(verwaltung.getFirma());
-		System.out.println("-------------------------------");
-		// die Ausgabe, die den Wert aller Bruttogähalter zurückgibt
-		System.out.println("Brutto Gehalt alle Mitarbeiter: "
-				+ verwaltung.berechneSummeAlleGehaelter(verwaltung.getMitarbeiter_Liste()) + " EUR");
-		System.out.println("-------------------------------");
+		// Mitarbeiter, die der bestimmten Abteilung angehï¿½ren
+		System.out.println(verwaltung.firma);
+//		System.out.println("-------------------------------");
+		// die Ausgabe, die den Wert aller Bruttogï¿½halter zurï¿½ckgibt
+//		System.out.println("Brutto Gehalt alle Mitarbeiter: "
+//				+ verwaltung.berechneSummeAlleGehaelter(verwaltung.getMitarbeiter_Liste()) + " EUR");
+//		System.out.println("-------------------------------");
 		// die Methode "sortMitarbeiterNachGehalt" sortiert alle Mitarbeiter aus der
-		// Mitarbeiterliste nach Bruttogehälter der Mitarbeiter
-		verwaltung.sortMitarbeiterNachGehalt();
-		verwaltung.ausgabe(verwaltung.getMitarbeiter_Liste());
-		System.out.println("-------------------------------");
+		// Mitarbeiterliste nach Bruttogehï¿½lter der Mitarbeiter
+//		verwaltung.sortMitarbeiterNachGehalt();
+//		verwaltung.ausgabe(verwaltung.getMitarbeiter_Liste());
+//		System.out.println("-------------------------------");
 		// die Methode "sortMitarbeiterNachNamen" sortiert alle Mitarbeiter aus der
 		// Mitarbeiterliste nach Namen der Mitarbeiter
-		verwaltung.sortMitarbeiterNachNamen();
-		verwaltung.ausgabe(verwaltung.getMitarbeiter_Liste());
+//		verwaltung.sortMitarbeiterNachNamen();
+//		verwaltung.ausgabe(verwaltung.getMitarbeiter_Liste());
+		new GUI();
 
 	}
 
@@ -40,22 +44,6 @@ public class Verwaltung implements Utility {
 		abteilungen_Liste = new ArrayList<Abteilung>();
 		this.init();
 		this.firma = new Firma(mitarbeiter_Liste, abteilungen_Liste);
-	}
-
-	public Firma getFirma() {
-		return firma;
-	}
-
-	public void setFirma(Firma firma) {
-		this.firma = firma;
-	}
-
-	public ArrayList<Mitarbeiter> getMitarbeiter_Liste() {
-		return (ArrayList<Mitarbeiter>) mitarbeiter_Liste;
-	}
-
-	public List<Abteilung> getAbteilungen_Liste() {
-		return abteilungen_Liste;
 	}
 
 	// die Methode initialisiert die Testwerte in der Mitarbeiterliste
@@ -67,22 +55,22 @@ public class Verwaltung implements Utility {
 
 		for (int i = 0; i < namen.length; i++) {
 			if (i < namen.length / 2) {
-				// zufällig generiertes Gehalt (zwischen 1900 - 2500)
+				// zufï¿½llig generiertes Gehalt (zwischen 1900 - 2500)
 				int randomGrundGehalt = 1900 + (int) (Math.random() * (2500 - 1900));
-				// zufällig generierte Zulage (zwischen 100 - 300)
+				// zufï¿½llig generierte Zulage (zwischen 100 - 300)
 				int randomZulage = 100 + (int) (Math.random() * (300 - 100));
-				// zufällig generierter Ortszuschlag
+				// zufï¿½llig generierter Ortszuschlag
 				int ortszuschlag = 0 + (int) (Math.random() * (120 - 0));
 				mitarbeiter_Liste.add(
 						new Angestellter(idMitarbeiter++, namen[i], randomGrundGehalt, ortszuschlag, randomZulage));
 			} else {
-				// zufällig generiertes Lohn per Stunde (zwischen 12 - 18)
+				// zufï¿½llig generiertes Lohn per Stunde (zwischen 12 - 18)
 				int randomStundenLohn = 12 + (int) (Math.random() * (18 - 12));
-				// zufällig generierte Arbeitsstunden (zwischen 160 - 174)
+				// zufï¿½llig generierte Arbeitsstunden (zwischen 160 - 174)
 				int randomAnzahlStunden = 160 + (int) (Math.random() * (174 - 160));
-				// zufällig generierter Ortszuschlag( zwischen 0 - 120)
+				// zufï¿½llig generierter Ortszuschlag( zwischen 0 - 120)
 				int ortszuschlag = 0 + (int) (Math.random() * (120 - 0));
-				// zufällig generierte Zulage (zwischen 50 - 200)
+				// zufï¿½llig generierte Zulage (zwischen 50 - 200)
 				int randomSchichtZulage = 50 + (int) (Math.random() * (200 - 50));
 				mitarbeiter_Liste.add(new Arbeiter(idMitarbeiter++, namen[i], randomStundenLohn, randomAnzahlStunden,
 						ortszuschlag, randomSchichtZulage));
@@ -121,13 +109,13 @@ public class Verwaltung implements Utility {
 	}
 
 	// die Methode gibt ein Objekttype Mitarbeiter aus, falls es nicht gefunden
-	// wird, gibt es den Wert null zurück
+	// wird, gibt es den Wert null zurï¿½ck
 	public Mitarbeiter searchMitarbeiterInFirma(ArrayList<Mitarbeiter> mitarbeiter, int id) {
 		return ((isMitarbeiterIn(mitarbeiter, id) ? mitarbeiter.get(getIndexVonMitarbeiter(mitarbeiter, id)) : null));
 	}
 
-	// die Methode überpruft, ob ein Mitarbeiter mit einer bestimmten ID besteht,
-	// und gibt einen logischen Wert zurück
+	// die Methode ï¿½berpruft, ob ein Mitarbeiter mit einer bestimmten ID besteht,
+	// und gibt einen logischen Wert zurï¿½ck
 	public boolean isMitarbeiterIn(ArrayList<Mitarbeiter> mitarbeiter, int id) {
 		for (int i = 0; i < mitarbeiter.size(); i++) {
 			if (id == mitarbeiter.get(i).getId()) {
@@ -137,8 +125,8 @@ public class Verwaltung implements Utility {
 		return false;
 	}
 
-	// die Methode gibt den Index des Mitarbeitobjektes zurück, falls es besteht,
-	// falls nicht gibt es den Wert -1 zurück
+	// die Methode gibt den Index des Mitarbeitobjektes zurï¿½ck, falls es besteht,
+	// falls nicht gibt es den Wert -1 zurï¿½ck
 	public int getIndexVonMitarbeiter(ArrayList<Mitarbeiter> mitarbeiter, int id) {
 		for (int i = 0; i < mitarbeiter.size(); i++) {
 			if (id == mitarbeiter.get(i).getId()) {
@@ -148,7 +136,7 @@ public class Verwaltung implements Utility {
 		return -1;
 	}
 
-	// die Methode gibt den Inhalt des Mitarbeiterobjektes mit einem dazugehörigen
+	// die Methode gibt den Inhalt des Mitarbeiterobjektes mit einem dazugehï¿½rigen
 	// Nettogehalt aus
 	public void ausgabe(Mitarbeiter mitarbeiter) {
 		System.out.println(mitarbeiter + ", Netto= " + berechneNettoGehalt(mitarbeiter));
@@ -237,7 +225,7 @@ public class Verwaltung implements Utility {
 		return null;
 	}
 
-// die Methode sucht nach einem Mitarbeiter aus allen Abteilungen, wenn er besteht, dann gibt das Mitarbeiterobjekt zurück
+// die Methode sucht nach einem Mitarbeiter aus allen Abteilungen, wenn er besteht, dann gibt das Mitarbeiterobjekt zurï¿½ck
 	public Mitarbeiter searchMitarbeiterAusAlleAbteilungen(ArrayList<Abteilung> abteilungen, int mitarbeiter_id) {
 		for (Abteilung abteilung : abteilungen) {
 			for (Mitarbeiter mitarbeiter : abteilung.getMitarbeiter_liste()) {

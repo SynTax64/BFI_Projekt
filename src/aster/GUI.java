@@ -1,28 +1,21 @@
 package aster;
 
 import java.awt.BorderLayout;
-import java.awt.Button;
-import java.awt.Color;
 import java.awt.Dimension;
-import java.awt.FlowLayout;
-import java.awt.Font;
 import java.awt.GridLayout;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
-import javax.swing.JList;
 import javax.swing.JPanel;
-import javax.swing.JRadioButtonMenuItem;
-import javax.swing.JScrollBar;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
-import javax.swing.border.Border;
 
 public class GUI extends JFrame {
 
+	private static final long serialVersionUID = -2613768345334659565L;
 	JLabel l_firmaManagementSystem;
 	JPanel p_hauptPannel = null;
 	JPanel p_ersteSection = null;
@@ -48,8 +41,9 @@ public class GUI extends JFrame {
 	JTable t_listeMitarbeiter = null;
 	JScrollPane sc_listeMitarbeiter = null;
 
-	// die dritte Section der Applikation (Auswahl einen Angestellter, angezeigt,
-	// bearbeitet oder angelegt wird)
+	// die dritte Section der Applikation (Auswahl einen Angestellter, wird
+	// angezeigt,
+	// bearbeitet oder angelegt)
 	JLabel l_AngestellteID = null;
 	JTextField t_AngestellteID = null;
 	JButton b_AngestellterAnzeigenBearbeiten = null;
@@ -76,7 +70,7 @@ public class GUI extends JFrame {
 	public GUI() {
 
 		// Alle Panels der Applikation
-		p_hauptPannel = new JPanel(new GridLayout(2, 2, 20, 20));
+		p_hauptPannel = new JPanel(new GridLayout(2, 2, 15, 15));
 		p_ersteSection = new JPanel(new GridLayout(2, 1, 20, 20));
 		p_subErste1Section = new JPanel(new GridLayout(1, 1));
 		p_subErste2Section = new JPanel(new GridLayout(2, 2));
@@ -95,6 +89,7 @@ public class GUI extends JFrame {
 		t_listeAbteilungen.setRowHeight(30);
 
 		sc_listeAbteil = new JScrollPane(t_listeAbteilungen);
+		sc_listeAbteil.setSize(getWidth(), 400);
 		b_angestellterAnz = new JButton("Liste aller Angestellten anzeigen");
 
 		// -------- 2 -----------
@@ -177,7 +172,7 @@ public class GUI extends JFrame {
 
 		setSize(new Dimension(1000, 550));
 		setVisible(true);
-		getContentPane().setLayout(new BorderLayout());
+		getContentPane().setLayout(null);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 	}
 
@@ -219,7 +214,4 @@ public class GUI extends JFrame {
 		return listeMitarbeiter_TestData;
 	}
 
-	public static void main(String[] args) {
-		new GUI();
-	}
 }

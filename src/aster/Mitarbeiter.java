@@ -1,7 +1,10 @@
 package aster;
 
-public abstract class Mitarbeiter {
+import java.io.Serializable;
 
+public abstract class Mitarbeiter implements Serializable {
+
+	private static final long serialVersionUID = 5246599947086653567L;
 	private int id;
 	private String name;
 
