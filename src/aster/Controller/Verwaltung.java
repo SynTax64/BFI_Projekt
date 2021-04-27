@@ -1,10 +1,11 @@
 package aster.Controller;
 
+import java.io.IOException;
 import java.io.Serializable;
+import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Random;
 
@@ -13,8 +14,8 @@ import aster.model.Angestellter;
 import aster.model.Arbeiter;
 import aster.model.Firma;
 import aster.model.Mitarbeiter;
+import aster.service.FileWriterService;
 import aster.utility.Utility;
-import aster.view.GUI;
 
 public class Verwaltung implements Utility, Serializable {
 
@@ -24,28 +25,12 @@ public class Verwaltung implements Utility, Serializable {
 	final public List<Abteilung> abteilungen_Liste;
 	Firma firma;
 
-	public static void main(String[] args) {
+	public static void main(String[] args) throws IOException {
 
 		Verwaltung verwaltung = new Verwaltung();
-		// die Datenausgabe der ganzen Firma und zwar alle Abteilungen und alle
-		// Mitarbeiter, die der bestimmten Abteilung angeh�ren
-		System.out.println(verwaltung.firma);
-//		System.out.println("-------------------------------");
-		// die Ausgabe, die den Wert aller Bruttog�halter zur�ckgibt
-//		System.out.println("Brutto Gehalt alle Mitarbeiter: "
-//				+ verwaltung.berechneSummeAlleGehaelter(verwaltung.getMitarbeiter_Liste()) + " EUR");
-//		System.out.println("-------------------------------");
-		// die Methode "sortMitarbeiterNachGehalt" sortiert alle Mitarbeiter aus der
-		// Mitarbeiterliste nach Bruttogeh�lter der Mitarbeiter
-//		verwaltung.sortMitarbeiterNachGehalt();
-//		verwaltung.ausgabe(verwaltung.getMitarbeiter_Liste());
-//		System.out.println("-------------------------------");
-		// die Methode "sortMitarbeiterNachNamen" sortiert alle Mitarbeiter aus der
-		// Mitarbeiterliste nach Namen der Mitarbeiter
-//		verwaltung.sortMitarbeiterNachNamen();
-//		verwaltung.ausgabe(verwaltung.getMitarbeiter_Liste());
-		new GUI();
-
+		System.out.println(getMostWorker(verwaltung.getAbteilungen_Liste()));
+		Abteilung mostWorkers = getMostWorker(verwaltung.abteilungen_Liste);
+		FileWriterService.serialize(mostWorkers.getMitarbeiter_liste(), Path.of("Abteilung.ser"));
 	}
 
 	public Verwaltung() {
@@ -55,7 +40,25 @@ public class Verwaltung implements Utility, Serializable {
 		this.firma = new Firma(mitarbeiter_Liste, abteilungen_Liste);
 	}
 
-	// die Methode initialisiert die Testwerte in der Mitarbeiterliste
+	public Firma getFirma() {
+		return firma;
+	}
+
+	public void setFirma(Firma firma) {
+		this.firma = firma;
+	}
+
+	public List<Mitarbeiter> getMitarbeiter_Liste() {
+		return mitarbeiter_Liste;
+	}
+
+	public List<Abteilung> getAbteilungen_Liste() {
+		return abteilungen_Liste;
+	}
+
+	/**
+	 * init() initialisiert die Testwerte in der Mitarbeiterliste
+	 */
 	public void init() {
 		String[] namen = new String[] { "David", "Bojan", "Nika", "Joanne", "Ferius", "Demi", "Domen", "Vasja", "Franc",
 				"Stefan", "Herbert", "Dane" };
@@ -64,22 +67,22 @@ public class Verwaltung implements Utility, Serializable {
 
 		for (int i = 0; i < namen.length; i++) {
 			if (i < namen.length / 2) {
-				// zuf�llig generiertes Gehalt (zwischen 1900 - 2500)
+				// zufaellig generiertes Gehalt (zwischen 1900 - 2500)
 				int randomGrundGehalt = 1900 + (int) (Math.random() * (2500 - 1900));
-				// zuf�llig generierte Zulage (zwischen 100 - 300)
+				// zufaellig generierte Zulage (zwischen 100 - 300)
 				int randomZulage = 100 + (int) (Math.random() * (300 - 100));
-				// zuf�llig generierter Ortszuschlag
+				// zufaellig generierter Ortszuschlag
 				int ortszuschlag = 0 + (int) (Math.random() * (120 - 0));
 				mitarbeiter_Liste.add(
 						new Angestellter(idMitarbeiter++, namen[i], randomGrundGehalt, ortszuschlag, randomZulage));
 			} else {
-				// zuf�llig generiertes Lohn per Stunde (zwischen 12 - 18)
+				// zufaellig generiertes Lohn per Stunde (zwischen 12 - 18)
 				int randomStundenLohn = 12 + (int) (Math.random() * (18 - 12));
-				// zuf�llig generierte Arbeitsstunden (zwischen 160 - 174)
+				// zufaellig generierte Arbeitsstunden (zwischen 160 - 174)
 				int randomAnzahlStunden = 160 + (int) (Math.random() * (174 - 160));
-				// zuf�llig generierter Ortszuschlag( zwischen 0 - 120)
+				// zufaellig generierter Ortszuschlag( zwischen 0 - 120)
 				int ortszuschlag = 0 + (int) (Math.random() * (120 - 0));
-				// zuf�llig generierte Zulage (zwischen 50 - 200)
+				// zufaellig generierte Zulage (zwischen 50 - 200)
 				int randomSchichtZulage = 50 + (int) (Math.random() * (200 - 50));
 				mitarbeiter_Liste.add(new Arbeiter(idMitarbeiter++, namen[i], randomStundenLohn, randomAnzahlStunden,
 						ortszuschlag, randomSchichtZulage));
@@ -117,50 +120,44 @@ public class Verwaltung implements Utility, Serializable {
 		abteilungen_Liste.add(new Abteilung(4, Utility.ABTEILUNG_HR, mitarbeiterInAbteilung_HR));
 	}
 
-	public void createFile() {
-
+	/**
+	 * gibt eine Abteilung zurueck, die meisten Mitarbeiter hat
+	 * 
+	 * @param abteilungen alle existierten Abteilungen
+	 */
+	public static Abteilung getMostWorker(List<Abteilung> abteilungen) {
+		Abteilung mostWorkers = null;
+		int lengthOfWorkers = 0;
+		int tCounter = 0;
+		for (int i = 0; i < abteilungen.size(); i++) {
+			tCounter = abteilungen.get(i).getMitarbeiter_liste().size();
+			if (tCounter > lengthOfWorkers) {
+				mostWorkers = abteilungen.get(i);
+				lengthOfWorkers = tCounter;
+			}
+		}
+		return mostWorkers;
 	}
 
-	public void deleteFileIfExist() {
-
-	}
-
-	public void serialize() {
-
-	}
-
-	public void deserialize() {
-
-	}
-
-	public String getAngestellterNamen() {
-		return "";
-	}
-
-	public void writeName() {
-
-	}
-
-	public void readName() {
-
-	}
-
-	public void sortAndSerialize() {
-
-	}
-
-	public Abteilung getMostWorker(Abteilung[] abteilungen) {
-		return new Abteilung();
-	}
-
-	// die Methode gibt ein Objekttype Mitarbeiter aus, falls es nicht gefunden
-	// wird, gibt es den Wert null zur�ck
+	/**
+	 * gibt ein Objekttype Mitarbeiter aus, falls es nicht gefunden wird, gibt es
+	 * den Wert null zurueck
+	 * 
+	 * @param mitarbeiter alle Mitarbeiter in Firma
+	 * @param id          ID des Mitarbeiter
+	 */
 	public Mitarbeiter searchMitarbeiterInFirma(ArrayList<Mitarbeiter> mitarbeiter, int id) {
 		return ((isMitarbeiterIn(mitarbeiter, id) ? mitarbeiter.get(getIndexVonMitarbeiter(mitarbeiter, id)) : null));
 	}
 
-	// die Methode �berpruft, ob ein Mitarbeiter mit einer bestimmten ID besteht,
-	// und gibt einen logischen Wert zur�ck
+	/**
+	 * wird ueberpruft, ob ein Mitarbeiter mit einer bestimmten ID besteht und gibt
+	 * einen logischen Wert zurueck
+	 * 
+	 * @param mitarbeiter alle Mitarbeiter in Firma
+	 * 
+	 * @param id          ID des Mitarbeiter
+	 */
 	public boolean isMitarbeiterIn(ArrayList<Mitarbeiter> mitarbeiter, int id) {
 		for (int i = 0; i < mitarbeiter.size(); i++) {
 			if (id == mitarbeiter.get(i).getId()) {
@@ -170,8 +167,14 @@ public class Verwaltung implements Utility, Serializable {
 		return false;
 	}
 
-	// die Methode gibt den Index des Mitarbeitobjektes zur�ck, falls es besteht,
-	// falls nicht gibt es den Wert -1 zur�ck
+	/**
+	 * gibt den Index des Mitarbeitobjektes zurueck, falls es besteht, falls nicht
+	 * gibt es den Wert -1 zurueck
+	 * 
+	 * @param mitarbeiter alle Mitarbeiter in Firma
+	 * 
+	 * @param id          ID des Mitarbeiter
+	 */
 	public int getIndexVonMitarbeiter(ArrayList<Mitarbeiter> mitarbeiter, int id) {
 		for (int i = 0; i < mitarbeiter.size(); i++) {
 			if (id == mitarbeiter.get(i).getId()) {
@@ -181,20 +184,32 @@ public class Verwaltung implements Utility, Serializable {
 		return -1;
 	}
 
-	// die Methode gibt den Inhalt des Mitarbeiterobjektes mit einem dazugeh�rigen
-	// Nettogehalt aus
+	/**
+	 * // die Methode gibt den Inhalt des Mitarbeiterobjektes mit einem
+	 * dazugehoerigen Nettogehalt aus
+	 * 
+	 * @param mitarbeiter Objekt des Mitarbeiter
+	 */
 	public void ausgabe(Mitarbeiter mitarbeiter) {
 		System.out.println(mitarbeiter + ", Netto= " + berechneNettoGehalt(mitarbeiter));
 	}
 
-	// die Methode gibt den Inhalt aller Mitarbeiterobjekte aus
+	/**
+	 * gibt den Inhalt aller Mitarbeiterobjekte aus
+	 * 
+	 * @param mitarbeiters eine Liste der Mitarbeiter
+	 */
 	public void ausgabe(ArrayList<Mitarbeiter> mitarbeiters) {
 		for (Mitarbeiter mitarbeiter : mitarbeiters) {
 			ausgabe(mitarbeiter);
 		}
 	}
 
-	// die Methode gibt die Anzahl der Angestellten aus der Mitarbeiterliste aus
+	/**
+	 * die Anzahl der Angestellten aus der Mitarbeiterliste aus
+	 * 
+	 * @param mitarbeiter eine Liste der Mitarbeiter
+	 */
 	public int getAnzAngestellterGesamt(ArrayList<Mitarbeiter> mitarbeiter) {
 		int anz_angestellter = 0;
 		for (int i = 0; i < mitarbeiter.size(); i++) {
@@ -205,7 +220,12 @@ public class Verwaltung implements Utility, Serializable {
 		return anz_angestellter;
 	}
 
-	// die Methode gibt die Anzahl der Arbeiter aus der Mitarbeiterliste aus
+	/**
+	 * gibt die Anzahl der Arbeiter aus der Mitarbeiterliste aus
+	 * 
+	 * @param mitarbeiter eine Liste der Mitarbeiter
+	 */
+
 	public int getAnzArbeiterGesamt(ArrayList<Mitarbeiter> mitarbeiter) {
 		int anz_arbeiter = 0;
 		for (int i = 0; i < mitarbeiter.size(); i++) {
@@ -216,7 +236,12 @@ public class Verwaltung implements Utility, Serializable {
 		return anz_arbeiter;
 	}
 
-	// berechnet die Bruttosumme aller Mitarbeiter
+	/**
+	 * berechnet die Bruttosumme aller Mitarbeiter
+	 * 
+	 * @param list eine Liste der Mitarbeiter
+	 */
+
 	public double berechneSummeAlleGehaelter(List<Mitarbeiter> list) {
 		double summe = 0;
 		for (Mitarbeiter mitarbeiter : list) {
@@ -225,7 +250,12 @@ public class Verwaltung implements Utility, Serializable {
 		return summe;
 	}
 
-	// berechnet das Nettogehalt eines Mitarbeiters
+	/**
+	 * berechnet das Nettogehalt eines Mitarbeiters
+	 * 
+	 * @param mitarbeiter Objekt des Mitarbeiter
+	 */
+
 	public double berechneNettoGehalt(Mitarbeiter mitarbeiter) {
 		double netto = 0;
 		if (mitarbeiter instanceof Angestellter) {
@@ -238,7 +268,12 @@ public class Verwaltung implements Utility, Serializable {
 		return netto;
 	}
 
-	// die Ausgabe aller Abteilungen
+	/**
+	 * die Ausgabe aller Abteilungen
+	 * 
+	 * @param abteilungen eine Liste alle existierten Abteilungen in einer Firma
+	 */
+
 	public ArrayList<Abteilung> ausgabe_AlleAbteilungen(ArrayList<Abteilung> abteilungen) {
 		for (int i = 0; i < abteilungen.size(); i++) {
 			System.out.println(abteilungen.get(i));
@@ -246,8 +281,14 @@ public class Verwaltung implements Utility, Serializable {
 		return abteilungen;
 	}
 
-	// gibt einen logischen Wert aus, wenn eine Abteilung mit einem bestimmten ID
-	// besteht oder nicht
+	/**
+	 * gibt einen logischen Wert aus, wenn eine Abteilung mit einem bestimmten ID
+	 * besteht oder nicht
+	 * 
+	 * @param abteilungen eine Liste alle existierten Abteilungen
+	 * @param id          ID einer Abteilung
+	 */
+
 	public boolean searchAbteilung(ArrayList<Abteilung> abteilungen, int id) {
 		for (int i = 0; i < abteilungen.size(); i++) {
 			if (abteilungen.get(i).getId() == id) {
@@ -257,8 +298,16 @@ public class Verwaltung implements Utility, Serializable {
 		return false;
 	}
 
-	// die Methode gibt die Arrayliste der Mitarbeiter in einer bestimmten Abteilung
-	// aus
+	/**
+	 * die Methode gibt die Arrayliste der Mitarbeiter in einer bestimmten Abteilung
+	 * aus
+	 * 
+	 * @param abteilungen eine Liste alle existierten Abteilungen
+	 * 
+	 * @param id          ID einer Abteilung
+	 * 
+	 */
+
 	public ArrayList<Mitarbeiter> getMitarbeiterListeVonAbteilung(ArrayList<Abteilung> abteilungen, int abt_id) {
 		if (searchAbteilung(abteilungen, abt_id)) {
 			for (int l = 0; l < abteilungen.size(); l++) {
@@ -270,7 +319,14 @@ public class Verwaltung implements Utility, Serializable {
 		return null;
 	}
 
-// die Methode sucht nach einem Mitarbeiter aus allen Abteilungen, wenn er besteht, dann gibt das Mitarbeiterobjekt zur�ck
+	/**
+	 * die Methode sucht nach einem Mitarbeiter aus allen Abteilungen, wenn er
+	 * besteht, dann gibt das Mitarbeiterobjekt zurueck
+	 * 
+	 * @param abteilungen    alle existierten Abteilungen
+	 * @param mitarbeiter_id ID eines Mitarbeiter
+	 */
+
 	public Mitarbeiter searchMitarbeiterAusAlleAbteilungen(ArrayList<Abteilung> abteilungen, int mitarbeiter_id) {
 		for (Abteilung abteilung : abteilungen) {
 			for (Mitarbeiter mitarbeiter : abteilung.getMitarbeiter_liste()) {
@@ -282,7 +338,29 @@ public class Verwaltung implements Utility, Serializable {
 		return null;
 	}
 
-	// die Methode macht eine Sortierung der Mitarbeiter nach Namen
+	/**
+	 * gibt zuruek alle Angestellter aus aller Abteilungen zurueck
+	 * 
+	 * @param abteilungen eine Lisre alle existierten Abteilungen
+	 */
+
+	public List<Mitarbeiter> getAlleAngesteller(List<Abteilung> abteilungen) {
+		List<Mitarbeiter> alleAngestellter = new ArrayList<Mitarbeiter>();
+
+		for (Abteilung abteilung : abteilungen) {
+			for (Mitarbeiter angestellter : abteilung.getMitarbeiter_liste()) {
+				if (angestellter instanceof Angestellter) {
+					alleAngestellter.add(angestellter);
+				}
+			}
+		}
+		return alleAngestellter;
+	}
+
+	/**
+	 * macht eine Sortierung der Mitarbeiter nach Namen
+	 * 
+	 */
 	public void sortMitarbeiterNachNamen() {
 
 		Collections.sort(mitarbeiter_Liste, new Comparator<Mitarbeiter>() {
@@ -294,7 +372,9 @@ public class Verwaltung implements Utility, Serializable {
 		});
 	}
 
-	// die Methode macht eine Sortierung der Mitarbeiter nach BruttoGehalt
+	/**
+	 * macht eine Sortierung der Mitarbeiter nach BruttoGehalt
+	 */
 	public void sortMitarbeiterNachGehalt() {
 
 		Collections.sort(mitarbeiter_Liste, new Comparator<Mitarbeiter>() {

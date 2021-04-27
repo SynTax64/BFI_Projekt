@@ -47,5 +47,4 @@ public abstract class Mitarbeiter implements Serializable {
 	public String toString() {
 		return String.format("id= %d, name= %s", getId(), getName());
 	}
-
 }

@@ -3,8 +3,9 @@ package aster.utility;
 import java.io.Serializable;
 
 public interface Utility extends Serializable {
+
 	int TAX_ANG = 20;
-	int TAX_ARB = 20;
+	int TAX_ARB = 15;
 
 	int SIZE_MITARBEITER = 12;
 	int SIZE_ABTEILUNGEN = 4;
